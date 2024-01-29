@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  web:
+    image: ruby:3.0
+    container_name: customers_demo
+    command: bash -c "rm -f tmp/pids/server.pid && bundle install && bundle exec rails s -b '0.0.0.0'"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ".:/app"
+    depends_on:
+      - db
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: postgres://postgres:password@db/customers_development
+    working_dir: /app
+
+  db:
+    image: postgres:13
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: customers_development
+
+volumes:
+  postgres_data:
