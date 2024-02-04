@@ -1,0 +1,33 @@
+<!-- app/views/customers/show.html.erb -->
+
+<div class="container mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
+  <h2 class="text-2xl font-semibold mb-6">Customer Details</h2>
+
+  <dl class="grid grid-cols-2 gap-4">
+    <dt class="text-sm font-medium text-gray-500">Username:</dt>
+    <dd class="text-sm font-medium text-gray-900"><%= @customer.username %></dd>
+
+    <dt class="text-sm font-medium text-gray-500">Email:</dt>
+    <dd class="text-sm font-medium text-gray-900"><%= @customer.email %></dd>
+
+    <dt class="text-sm font-medium text-gray-500">First Name:</dt>
+    <dd class="text-sm font-medium text-gray-900"><%= @customer.firstname %></dd>
+
+    <dt class="text-sm font-medium text-gray-500">Last Name:</dt>
+    <dd class="text-sm font-medium text-gray-900"><%= @customer.lastname %></dd>
+
+    <dt class="text-sm font-medium text-gray-500">Birthdate:</dt>
+    <dd class="text-sm font-medium text-gray-900"><%= @customer.birthdate %></dd>
+
+    <dt class="text-sm font-medium text-gray-500">Address:</dt>
+    <dd class="text-sm font-medium text-gray-900">
+      <%= @customer.address.street %>,
+      <%= @customer.address.housenumber %>,
+      <%= @customer.address.zip %>
+      <%= @customer.address.city %>
+    </dd>
+  </dl>
+
+  <%= link_to 'Edit Customer', edit_customer_path(@customer.id), class: 'mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600' %>
+  <%= link_to 'Back to Customers', customers_path, class: 'mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600' %>
+</div>

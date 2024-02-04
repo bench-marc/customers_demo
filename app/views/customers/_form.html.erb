@@ -1,0 +1,80 @@
+<%= form_for(@customer, local: true, html: { class: 'space-y-4' }) do |form| %>
+<% if @customer.errors.any? %>
+  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md mb-4">
+    <h3 class="font-bold">Validation Errors:</h3>
+    <ul class="list-disc pl-4">
+      <% @customer.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<!-- Customer Fields -->
+<div class="space-y-2">
+  <%= form.label :email, class: 'block text-sm font-medium text-gray-700' %>
+  <%= form.email_field :email, class: 'w-full border p-2 rounded-md' %>
+  <%= display_errors(@customer, :email) %>
+</div>
+
+<div class="space-y-2">
+  <%= form.label :username, class: 'block text-sm font-medium text-gray-700' %>
+  <%= form.text_field :username, class: 'w-full border p-2 rounded-md' %>
+  <%= display_errors(@customer, :username) %>
+</div>
+
+<div class="space-y-2">
+  <%= form.label :firstname, class: 'block text-sm font-medium text-gray-700' %>
+  <%= form.text_field :firstname, class: 'w-full border p-2 rounded-md' %>
+  <%= display_errors(@customer, :firstname) %>
+</div>
+
+<div class="space-y-2">
+  <%= form.label :lastname, class: 'block text-sm font-medium text-gray-700' %>
+  <%= form.text_field :lastname, class: 'w-full border p-2 rounded-md' %>
+  <%= display_errors(@customer, :lastname) %>
+</div>
+
+<div class="space-y-2">
+  <%= form.label :birthdate, class: 'block text-sm font-medium text-gray-700' %>
+  <%= form.date_field :birthdate, class: 'w-full border p-2 rounded-md' %>
+  <%= display_errors(@customer, :birthdate) %>
+</div>
+
+<!-- Address Fields -->
+<div class="space-y-2">
+  <%= form.fields_for :address do |address_form| %>
+    <h3 class="text-lg font-semibold mb-2">Address</h3>
+
+    <div class="space-y-2">
+      <%= address_form.label :street, class: 'block text-sm font-medium text-gray-700' %>
+      <%= address_form.text_field :street, class: 'w-full border p-2 rounded-md' %>
+      <%= display_errors(@customer.address, :street) %>
+    </div>
+
+    <div class="space-y-2">
+      <%= address_form.label :housenumber, class: 'block text-sm font-medium text-gray-700' %>
+      <%= address_form.text_field :housenumber, class: 'w-full border p-2 rounded-md' %>
+      <%= display_errors(@customer.address, :housenumber) %>
+    </div>
+
+    <div class="space-y-2">
+      <%= address_form.label :zip, class: 'block text-sm font-medium text-gray-700' %>
+      <%= address_form.text_field :zip, class: 'w-full border p-2 rounded-md' %>
+      <%= display_errors(@customer.address, :zip) %>
+    </div>
+
+    <div class="space-y-2">
+      <%= address_form.label :city, class: 'block text-sm font-medium text-gray-700' %>
+      <%= address_form.text_field :city, class: 'w-full border p-2 rounded-md' %>
+      <%= display_errors(@customer.address, :city) %>
+    </div>
+  <% end %>
+</div>
+
+<!-- Submit Button -->
+<div class="text-right">
+  <%= form.submit @customer.persisted? ? 'Save Customer' : 'Create Customer', class: 'bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600' %>
+</div>
+
+<% end %>
