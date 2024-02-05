@@ -8,19 +8,29 @@ class Customer < ApplicationRecord
   validates :firstname, presence: true
   validates :lastname, presence: true
   validates :birthdate, presence: true
-  validate :details_address_combination_is_unique, on: :create
+  validate :unique_details_and_address_combination, on: :create
 
   accepts_nested_attributes_for :address
 
-  def details_address_combination_is_unique
-    existing_customer = Customer
-                        .joins(:address)
-                        .where('SIMILARITY(firstname, :firstname) > 0.7 AND SIMILARITY(lastname, :lastname) > 0.7', firstname: firstname, lastname: lastname)
-                        .where(birthdate: birthdate)
-                        .where('SIMILARITY(addresses.street, :street) > 0.5', street: address.street)
-                        .where('addresses.housenumber': address.housenumber, 'addresses.zip': address.zip, 'addresses.city': address.city)
-                        .first
+  def unique_details_and_address_combination
+    existing_customer = find_existing_customer_with_similar_details
 
-    errors.add(:base, "Details are same as for Customer #{existing_customer.id}") if existing_customer
+    return unless existing_customer
+    return unless existing_customer.address.same_street?(address.street)
+
+    errors.add(:base, "Details are same as for Customer #{existing_customer.id}")
+  end
+
+  private
+
+  def find_existing_customer_with_similar_details
+    similarity_threshold = 0.7
+
+    Customer
+      .joins(:address)
+      .where('SIMILARITY(firstname, :firstname) > :threshold AND SIMILARITY(lastname, :lastname) > :threshold', firstname: firstname, lastname: lastname, threshold: similarity_threshold)
+      .where(birthdate: birthdate)
+      .where('addresses.zip': address.zip, 'addresses.city': address.city)
+      .first
   end
 end
