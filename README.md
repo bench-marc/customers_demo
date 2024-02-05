@@ -1,24 +1,18 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Beispiel Kundendatenbank mit Duplettenprüfung
 
-Things you may want to cover:
+## Dublettenprüfung
+Es werden folgende Rüfungen durchgeführt
 
-* Ruby version
+### Vergleich von Vorname, Nachname, Geburtsdatum, Hausnummer, PLZ und Stadt
+Bei Vor- und Nachname wird die Postgres-Funktion SIMILARITY mti dem Mindestwert 0.7 verwendet. 
+Somit wird z.B. bei einem Doppelnamen auch verschiedene Schreibweisen gefunden (Schmidt-Müeller, SchmidtMüeller, Schmidt Müller).
+Das Geburtsdatum, die Hausnummer, die PLZ und die Stadt müssen exakt gleich sein. Stadt ist zwar derzeit ein Freitextfeld, sollte aber
+in einer Produktivanwendung aus einem Dropdown ausgewählt werden.
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### Vergleich der Adresse
+Falls es bei den persönlichen Daten einen Treffer gibt, wird zusätzlich noch die Straße verglichen.
+Vor dem Vergleich der Straße werden die Straßennamen standardisiert: Die Substrings 'straße', 'strasse' und 'strase' 
+werden in 'str' umgewandelt, bevor sie verglichen werden. Außerdem werden jegliche andere Zeichen vom Straßennamen vor dem Vergleich entfernt (z.B. '.').
+Somit würden z.B. Schillerstr. und Schillerstraße als gleich betrachtet werden. 
